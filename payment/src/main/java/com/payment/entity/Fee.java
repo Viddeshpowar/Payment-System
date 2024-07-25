@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -33,6 +35,11 @@ public class Fee {
 		LocalDate date = LocalDate.now();
 		updatedDatetime = Date.valueOf(date);
 	}
+	@PrePersist
+    @PreUpdate
+    public void updateTimestamp() {
+        this.updatedDatetime = Date.valueOf(LocalDate.now());
+    }
 	public long getFeeId() {
 		return feeId;
 	}

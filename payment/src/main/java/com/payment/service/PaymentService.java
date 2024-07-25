@@ -10,7 +10,7 @@ public interface PaymentService {
 	
 	public Payment getPaymentById(long paymentId);
 	
-	public long addPaymentDetails(PaymentDetailsRequestDTO paymentDetailRequest);
+	public long addPaymentDetails(long fromAccountId, Payment payment);
 	
 	public long addPayment(Payment payment);
 	

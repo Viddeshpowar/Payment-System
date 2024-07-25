@@ -1,5 +1,7 @@
 package com.payment.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,19 @@ public class PayeeController {
 	private PayeeService payeeService;
 	
 	@PostMapping("/payee")
-	public ResponseEntity<String> addPayee(@RequestBody Payee payee){
+	public ResponseEntity<String> addPayee(@RequestBody Payee payee) {
+		// Validate dueDate
+
+		// Convert java.sql.Date to java.time.LocalDate
+		java.sql.Date sqlDate = payee.getDueDate();
+		LocalDate dueDate = sqlDate.toLocalDate();
+
+		if (dueDate.isBefore(LocalDate.now())) {
+			return new ResponseEntity<>("Due date must be a present or future date", HttpStatus.BAD_REQUEST);
+		}
+
 		long payeeId = payeeService.addPayee(payee);
-		return new ResponseEntity<>("Payee Details saved Successfully Payee Id is : "+payeeId, HttpStatus.CREATED);
+		return new ResponseEntity<>("Payee details saved successfully. Payee ID is: " + payeeId, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{payee-id}/payee")

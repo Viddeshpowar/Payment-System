@@ -40,7 +40,7 @@ public class PaymentServiceImpl implements PaymentService{
 	@Override
 	public Payment getPaymentById(long paymentId) {
 		// TODO Auto-generated method stub
-		return paymentRepo.findById(paymentId).orElse(null);
+		return paymentRepo.findById(paymentId).get();
 	}
 
 	@Override
@@ -51,17 +51,17 @@ public class PaymentServiceImpl implements PaymentService{
 	}
 
 	@Override
-	public long addPaymentDetails(PaymentDetailsRequestDTO paymentDetailRequest) {
+	public long addPaymentDetails(long fromAccountId, Payment payment) {
 		// TODO Auto-generated method stub
 		
 		//Payee
-		long payeeId = paymentDetailRequest.getPayeeId();
+		long payeeId = payment.getPayeeId();
 		Payee payee = payeeService.getPayeeById(payeeId);
 		double amountDue = payee.getAmountDue();
 		
 		
 		// payment
-		long toAccountId = paymentDetailRequest.getToAccountId();
+		long toAccountId = payment.getAccountId(); //this is toAccountId
 		Account toAccount = accountService.getAccountById(toAccountId);
 		double toAccountBalance = toAccount.getAccountBalance();
 		toAccountBalance += amountDue;
@@ -69,10 +69,9 @@ public class PaymentServiceImpl implements PaymentService{
 		toAccount.setUpdatedDatetime();
 		
 		
-		double finalDueAmount = feeService.calculateFee(amountDue);
+		double finalDueAmount = feeService.calculateFee(payment.getFeeId(),amountDue);
 		
 		//fromAccountId
-		long fromAccountId = paymentDetailRequest.getFromAccountId();
 		Account fromAccount = accountService.getAccountById(fromAccountId);
 		double fromAccountBalance = fromAccount.getAccountBalance();
 		fromAccountBalance -= finalDueAmount;
@@ -82,9 +81,6 @@ public class PaymentServiceImpl implements PaymentService{
 		payee.setAmountDue(amountDue);
 		
 		//to get fee on amount
-		Fee fee = feeService.getRecentFee();
-		
-		Payment payment = new Payment(toAccountId, payeeId, fee.getFeeId());
 		long paymentId = addPayment(payment);
 		return paymentId;
 	}

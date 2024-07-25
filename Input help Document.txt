@@ -1,0 +1,35 @@
+Swagger URL :- http://localhost:9090/swagger-ui/index.html#
+
+
+{
+  "payeeNumber": 12346,
+  "payeeName": "Sumit",
+  "amountDue": 100.00,
+  "dueDate": "2024-07-25"
+}
+
+{
+  "feeAmount": [10, 25, 50, 100, 500],
+  "amountMin": [0, 100, 1000, 10000],
+  "amountMax": [99, 999, 9999, 99999]
+}
+
+{
+  "accountNumber": 100,
+  "accountName": "viddesh",
+  "accountBalance": 500.00,
+  "accountStatus": "Active"
+}
+
+{
+  "accountNumber": 101,
+  "accountName": "Sumit",
+  "accountBalance": 100.00,
+  "accountStatus": "Active"
+}
+
+{
+  "accountId": 2,
+  "payeeId": 2,
+  "feeId": 1
+}

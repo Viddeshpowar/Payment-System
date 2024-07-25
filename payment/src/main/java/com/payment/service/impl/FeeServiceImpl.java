@@ -15,27 +15,27 @@ public class FeeServiceImpl implements FeeService{
 	private FeeRepository feeRepo;
 
 	@Override
-	public double calculateFee(double amount) {
+	public double calculateFee(long feeId, double amount) {
 		// TODO Auto-generated method stub
-		Fee fee = feeRepo.findById(feeRepo.findMaxFeeId()).orElse(null);
+		Fee fee = feeRepo.findById(feeId).get();
 		List<Long> amountMax = fee.getAmountMax();
-		List<Long> feeAmount = fee.getAmountMax();
+		List<Long> amountMin = fee.getAmountMin();
+ 		List<Long> feeAmount = fee.getFeeAmount();
 		
-		long finalFeeAmount = 0;
+		double finalFeeAmount = 0;
 		for(int i=0;i<amountMax.size();i++) {
-			if(amount <= amountMax.get(i)) {
-				finalFeeAmount = (long)feeAmount.get(i);
+			if(amount>=amountMin.get(i) && amount<=amountMax.get(i)) {
+				finalFeeAmount = feeAmount.get(i);
 				break;
 			}
 		}
 		if(finalFeeAmount == 0) {
-			finalFeeAmount = (long)feeAmount.get(amountMax.size());
+			finalFeeAmount = feeAmount.get(feeAmount.size()-1);
 		}
 		
-		amount +=finalFeeAmount;
+		finalFeeAmount+=amount;
 		
-		return amount;
-		
+		return finalFeeAmount;	
 	}
 
 	@Override
@@ -54,12 +54,12 @@ public class FeeServiceImpl implements FeeService{
 	@Override
 	public Fee findFeeById(long feeId) {
 		// TODO Auto-generated method stub
-		return feeRepo.findById(feeId).orElse(null);
+		return feeRepo.findById(feeId).get();
 	}
 
 	@Override
 	public Fee getRecentFee() {
 		// TODO Auto-generated method stub
-		return feeRepo.findById(feeRepo.findMaxFeeId()).orElse(null);
+		return feeRepo.findById(feeRepo.findMaxFeeId()).get();
 	}
 }

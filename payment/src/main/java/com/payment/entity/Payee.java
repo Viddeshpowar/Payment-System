@@ -11,8 +11,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Payee")
@@ -29,6 +32,7 @@ public class Payee {
 	@Column(name = "amount_due")
 	private String amountDue;
 	@Column(name = "due_date")
+    @NotNull
 	private Date dueDate;
 	@Column(name = "updated_datetime")
 	private Date updatedDatetime;
@@ -48,6 +52,12 @@ public class Payee {
 		LocalDate date = LocalDate.now();
 		updatedDatetime = Date.valueOf(date);
 	}
+	@PrePersist
+    @PreUpdate
+    public void updateTimestamp() {
+        this.updatedDatetime = Date.valueOf(LocalDate.now());
+    }
+	
 	public long getPayeeId() {
 		return payeeId;
 	}

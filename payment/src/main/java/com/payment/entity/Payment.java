@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -42,7 +44,11 @@ public class Payment {
 		LocalDate date = LocalDate.now();
 		updatedDatetime = Date.valueOf(date);
 	}
-
+	@PrePersist
+    @PreUpdate
+    public void updateTimestamp() {
+        this.updatedDatetime = Date.valueOf(LocalDate.now());
+    }
 	
 
 	public long getPaymentId() {

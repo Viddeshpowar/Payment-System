@@ -15,7 +15,7 @@ public class PayeeServiceImpl implements PayeeService{
 	@Override
 	public Payee getPayeeById(long payeeId) {
 		// TODO Auto-generated method stub
-		return payeeRepo.findById(payeeId).orElse(null);
+		return payeeRepo.findById(payeeId).get();
 	}
 
 	@Override
@@ -23,8 +23,5 @@ public class PayeeServiceImpl implements PayeeService{
 		// TODO Auto-generated method stub
 		payeeRepo.save(payee);
 		return payee.getPayeeId();
-		
-		
-	}
-	
+	}	
 }

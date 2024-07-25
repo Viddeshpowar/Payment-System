@@ -16,7 +16,7 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public Account getAccountById(long accountId) {
 		// TODO Auto-generated method stub
-		return accRepo.findById(accountId).orElse(null);
+		return accRepo.findById(accountId).get();
 	}
 
 	@Override

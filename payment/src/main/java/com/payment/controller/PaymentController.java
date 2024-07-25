@@ -57,9 +57,9 @@ public class PaymentController {
 		return new ResponseEntity<>(paymentDetailsDTO, HttpStatus.OK);
 	}
 	
-	@PostMapping("/payment")
-	public ResponseEntity<String> createPayment(@RequestBody PaymentDetailsRequestDTO paymentDetailRequest){
-		paymentService.addPaymentDetails(paymentDetailRequest);
+	@PostMapping("/{from-account-id}/payment")
+	public ResponseEntity<String> createPayment(@PathVariable("from-account-id")long fromAccountId,@RequestBody Payment payment){
+		paymentService.addPaymentDetails(fromAccountId, payment);
 		return null;
 	}
 	
