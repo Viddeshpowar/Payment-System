@@ -1,0 +1,18 @@
+cd /path/to/your/project
+
+# Remove the incorrect remote URL
+git remote remove origin
+
+# Add the correct remote URL
+git remote add origin https://github.com/Viddeshpowar/Shivam-hackathon-project.git
+# or using SSH
+git remote add origin git@github.com:Viddeshpowar/Shivam-hackathon-project.git
+
+# Stage all files
+git add .
+
+# Commit the files
+git commit -m "Initial commit"
+
+# Push to the main branch
+git push -u origin main
