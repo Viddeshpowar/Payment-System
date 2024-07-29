@@ -25,4 +25,16 @@ public class AccountServiceImpl implements AccountService{
 		accRepo.save(account);
 		return accRepo.findMaxAccountId();
 	}
+
+	@Override
+	public Account getPayeeAccountDetailsByName(String payeeName) {
+		// TODO Auto-generated method stub
+		return accRepo.findByAccountName(payeeName).get(0);
+	}
+
+	@Override
+	public long getMaxAccount() {
+		// TODO Auto-generated method stub
+		return accRepo.findMaxAccountId();
+	}
 }

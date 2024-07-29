@@ -5,20 +5,26 @@ import java.sql.Date;
 import com.payment.entity.Account;
 import com.payment.entity.Fee;
 import com.payment.entity.Payee;
-import com.payment.entity.Payment;
 
 public class PaymentDetailsDTO {
 	private long paymentId;
-	private Account toAccount;
+	private Account fromAccount;
 	private Payee payee;
+	private Account toAccount;
 	private Fee fee;
 	private Date updatedDate;
 	
-	public PaymentDetailsDTO(long paymentId, Account toAccount, Payee payee, Fee fee, Date updatedDate) {
+	public PaymentDetailsDTO() {
+		super();
+	}
+
+	public PaymentDetailsDTO(long paymentId, Account fromAccount, Payee payee, Account toAccount, Fee fee,
+			Date updatedDate) {
 		super();
 		this.paymentId = paymentId;
-		this.toAccount = toAccount;
+		this.fromAccount = fromAccount;
 		this.payee = payee;
+		this.toAccount = toAccount;
 		this.fee = fee;
 		this.updatedDate = updatedDate;
 	}
@@ -30,6 +36,16 @@ public class PaymentDetailsDTO {
 
 	public void setPaymentId(long paymentId) {
 		this.paymentId = paymentId;
+	}
+
+
+	public Account getFromAccount() {
+		return fromAccount;
+	}
+
+
+	public void setFromAccount(Account fromAccount) {
+		this.fromAccount = fromAccount;
 	}
 
 
@@ -75,7 +91,8 @@ public class PaymentDetailsDTO {
 
 	@Override
 	public String toString() {
-		return "PaymentDetailsDTO [paymentId=" + paymentId + ", toAccount=" + toAccount + ", payee=" + payee + ", fee="
-				+ fee + ", updatedDate=" + updatedDate + "]";
+		return "PaymentDetailsDTO [paymentId=" + paymentId + ", fromAccount=" + fromAccount + ", toAccount=" + toAccount
+				+ ", payee=" + payee + ", fee=" + fee + ", updatedDate=" + updatedDate + "]";
 	}
+
 }
