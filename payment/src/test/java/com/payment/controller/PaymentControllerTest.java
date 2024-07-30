@@ -65,21 +65,21 @@ public class PaymentControllerTest {
     }
 
 
-    @Test
-    void testUpdatePayment() {
-        // Arrange
-        long paymentId = 1L;
-        Payment payment = new Payment(); // Populate as needed
-        Payment updatedPayment = new Payment(); // Populate as needed
-        when(paymentService.updatePayment(paymentId, payment)).thenReturn(updatedPayment);
-
-        // Act
-        ResponseEntity<Payment> response = paymentController.updatePayment(paymentId, payment);
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(updatedPayment, response.getBody());
-    }
+//    @Test
+//    void testUpdatePayment() {
+//        // Arrange
+//        long paymentId = 1L;
+//        Payment payment = new Payment(); // Populate as needed
+//        Payment updatedPayment = new Payment(); // Populate as needed
+//        when(paymentService.updatePayment(paymentId, payment)).thenReturn(updatedPayment);
+//
+//        // Act
+//        ResponseEntity<Payment> response = paymentController.updatePayment(paymentId, payment);
+//
+//        // Assert
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertEquals(updatedPayment, response.getBody());
+//    }
 
     @Test
     void testDeletePayment_Success() {

@@ -101,11 +101,44 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public Payment updatePayment(long paymentId, Payment payment) {
-		// TODO Auto-generated method stub
+	public PaymentDetailsDTO updatePayment(long paymentId, Payment payment) {
 		Optional<Payment> existingPayment = paymentRepo.findById(paymentId);
 		if (existingPayment.isPresent()) {
-			return paymentRepo.save(payment);
+			// Fetch the existing payment
+			Payment oldPayment = existingPayment.get();
+
+			// Fetch new payee and account details
+			Payee newPayee = payeeService.getPayeeById(payment.getPayeeId());
+			double amountDue = newPayee.getAmountDue();
+			Account toAccount = accountService.getPayeeAccountDetailsByName(newPayee.getPayeeName());
+			Account fromAccount = accountService.getAccountById(payment.getAccountId());
+
+			// Calculate the final fee amount
+			double finalFeeAmount = feeService.calculateFee(payment.getFeeId(), amountDue);
+
+			// Update balances
+			double toAccountBalance = toAccount.getAccountBalance();
+			double fromAccountBalance = fromAccount.getAccountBalance();
+			toAccountBalance += amountDue;
+			fromAccountBalance -= finalFeeAmount;
+
+			toAccount.setAccountBalance(toAccountBalance);
+			toAccount.setUpdatedDatetime();
+			fromAccount.setAccountBalance(fromAccountBalance);
+			fromAccount.setUpdatedDatetime();
+			newPayee.setAmountDue(0);
+			
+			// Update the payment details
+			oldPayment.setAccountId(payment.getAccountId());
+			oldPayment.setPayeeId(payment.getPayeeId());
+			oldPayment.setFeeId(payment.getFeeId());
+			oldPayment.setUpdatedDatetime();
+
+			// Save the updated payment
+			paymentRepo.save(oldPayment);
+
+			// Return updated PaymentDetailsDTO
+			return getPaymentById(paymentId);
 		} else {
 			return null;
 		}

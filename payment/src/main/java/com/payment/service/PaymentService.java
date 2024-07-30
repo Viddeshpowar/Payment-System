@@ -14,7 +14,7 @@ public interface PaymentService {
 	
 	public long addPayment(Payment payment);
 	
-	public Payment updatePayment(long paymentId, Payment payment);
+	public PaymentDetailsDTO updatePayment(long paymentId, Payment payment);
 	
 	public boolean deletePayment(long paymentId);
 }

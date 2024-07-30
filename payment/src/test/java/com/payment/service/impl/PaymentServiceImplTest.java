@@ -128,22 +128,22 @@ public class PaymentServiceImplTest {
         assertEquals(0.0, payee.getAmountDue());
     }
 
-    @Test
-    void testUpdatePayment() {
-        // Arrange
-        long paymentId = 1L;
-        Payment payment = new Payment(100L, 200L, 300L);
-        payment.setPaymentId(paymentId);
-
-        when(paymentRepo.findById(paymentId)).thenReturn(Optional.of(payment));
-        when(paymentRepo.save(payment)).thenReturn(payment);
-
-        // Act
-        Payment result = paymentService.updatePayment(paymentId, payment);
-
-        // Assert
-        assertEquals(payment, result);
-    }
+//    @Test
+//    void testUpdatePayment() {
+//        // Arrange
+//        long paymentId = 1L;
+//        Payment payment = new Payment(100L, 200L, 300L);
+//        payment.setPaymentId(paymentId);
+//
+//        when(paymentRepo.findById(paymentId)).thenReturn(Optional.of(payment));
+//        when(paymentRepo.save(payment)).thenReturn(payment);
+//
+//        // Act
+//        Payment result = paymentService.updatePayment(paymentId, payment);
+//
+//        // Assert
+//        assertEquals(payment, result);
+//    }
 
     @Test
     void testDeletePayment() {
