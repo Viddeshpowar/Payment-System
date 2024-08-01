@@ -52,6 +52,9 @@ public class Account {
 	public long getAccountId() {
 		return accountId;
 	}
+	public void setAccountId(long accountId) {
+		this.accountId = accountId;
+	}
 	public long getAccountNumber() {
 		return accountNumber;
 	}

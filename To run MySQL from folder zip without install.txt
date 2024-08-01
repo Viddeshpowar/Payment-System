@@ -1,0 +1,18 @@
+1. Go inside bin folder, click on address bar, then type cmd
+
+2. mysqld --initialize
+
+3. mysqld --console
+
+4. mysql -u root -h localhost -p
+
+5. for temporary password go for "Data" folder inside Mysql  directory
+go for file name <computer name>.err You all will get a temporary password than paste it in command prompt
+
+6. mysql -u root -h localhost -p<temp Pass>
+
+7. to change password
+alter user 'root'@'localhost' identified by 'root';
+
+8. logout than login again with 
+mysql -u root -h localhost -proot

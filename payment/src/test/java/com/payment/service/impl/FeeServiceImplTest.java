@@ -1,21 +1,20 @@
 package com.payment.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-
-import com.payment.entity.Fee;
-import com.payment.repository.FeeRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.payment.entity.Fee;
+import com.payment.repository.FeeRepository;
 
 public class FeeServiceImplTest {
 

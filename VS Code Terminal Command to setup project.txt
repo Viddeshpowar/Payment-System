@@ -1,0 +1,15 @@
+1. to setup extensions install directory 
+code --extensions-dir <path-to-your-extensions>
+
+2.After taking project from outside to install dependancies & setup (In terminal of VS -code)
+mvn clean install
+
+3. Skip Tests but Compile Test Code
+mvn clean install -DskipTests
+
+4. Skip Tests and Do Not Compile Test Code
+mvn clean install -Dmaven.test.skip=true
+
+3.to run project from terminal (In terminal of VS -code)
+mvn spring-boot:run
+

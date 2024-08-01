@@ -43,6 +43,10 @@ public class Fee {
 	public long getFeeId() {
 		return feeId;
 	}
+	
+	public void setFeeId(long feeId) {
+		this.feeId = feeId;
+	}
 	public List<Long> getFeeAmount() {
 		return feeAmount;
 	}

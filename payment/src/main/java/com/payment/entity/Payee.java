@@ -61,6 +61,10 @@ public class Payee {
 	public long getPayeeId() {
 		return payeeId;
 	}
+	
+	public void setPayeeId(long payeeId) {
+		this.payeeId = payeeId;
+	}
 	public long getPayeeNumber() {
 		return payeeNumber;
 	}

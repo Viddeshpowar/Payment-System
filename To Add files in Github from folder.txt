@@ -4,9 +4,9 @@ cd /path/to/your/project
 git remote remove origin
 
 # Add the correct remote URL
-git remote add origin https://github.com/Viddeshpowar/Shivam-hackathon-project.git
+git remote add origin https://github.com/Viddeshpowar/Payment-System.git
 # or using SSH
-git remote add origin git@github.com:Viddeshpowar/Shivam-hackathon-project.git
+git remote add origin git@github.com:Viddeshpowar/Payment-System.git
 
 # Stage all files
 git add .

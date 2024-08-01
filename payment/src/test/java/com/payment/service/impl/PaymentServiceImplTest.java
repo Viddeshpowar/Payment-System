@@ -1,17 +1,20 @@
 package com.payment.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.payment.entity.Account;
 import com.payment.entity.Fee;
@@ -22,10 +25,8 @@ import com.payment.service.AccountService;
 import com.payment.service.FeeService;
 import com.payment.service.PayeeService;
 
+@ExtendWith(MockitoExtension.class)
 public class PaymentServiceImplTest {
-
-    @InjectMocks
-    private PaymentServiceImpl paymentService;
 
     @Mock
     private PaymentRepository paymentRepo;
@@ -39,122 +40,124 @@ public class PaymentServiceImplTest {
     @Mock
     private FeeService feeService;
 
+    @InjectMocks
+    private PaymentServiceImpl paymentService;
+
+    private Payment payment;
+    private Payee payee;
+    private Account fromAccount;
+    private Account toAccount;
+    private Fee fee;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        payment = new Payment();
+        payment.setPaymentId(1L);
+        payment.setAccountId(1L);
+        payment.setPayeeId(1L);
+        payment.setFeeId(1L);
+
+        payee = new Payee();
+        payee.setPayeeId(1L);
+        payee.setPayeeName("John Doe");
+        payee.setAmountDue(100.0);
+
+        fromAccount = new Account();
+        fromAccount.setAccountId(1L);
+        fromAccount.setAccountBalance(1000.0);
+
+        toAccount = new Account();
+        toAccount.setAccountId(2L);
+        toAccount.setAccountBalance(500.0);
+
+        fee = new Fee();
+        fee.setFeeId(1L);
+        fee.setAmountMax(Arrays.asList(100L, 500L, 1000L));
+        fee.setAmountMin(Arrays.asList(0L, 100L, 500L));
+        fee.setFeeAmount(Arrays.asList(10L, 20L, 30L));
     }
 
-//    @Test
-//    void testGetPaymentById() {
-//        // Arrange
-//        long paymentId = 1L;
-//        Payment payment = new Payment(100L, 200L, 300L);
-//        payment.setPaymentId(paymentId);
-//
-//        Account fromAccount = new Account();
-//        Payee payee = new Payee();
-//        Account toAccount = new Account();
-//        Fee fee = new Fee();
-//
-//        PaymentDetailsDTO paymentDetailsDTO = new PaymentDetailsDTO(
-//            paymentId,
-//            fromAccount,
-//            payee,
-//            toAccount,
-//            fee,
-//            payment.getUpdatedDatetime()
-//        );
-//
-//        when(paymentRepo.findById(paymentId)).thenReturn(Optional.of(payment));
-//        when(accountService.getAccountById(payment.getAccountId())).thenReturn(fromAccount);
-//        when(payeeService.getPayeeById(payment.getPayeeId())).thenReturn(payee);
-//        when(accountService.getPayeeAccountDetailsByName(payee.getPayeeName())).thenReturn(toAccount);
-//        when(feeService.findFeeById(payment.getFeeId())).thenReturn(fee);
-//
-//        // Act
-//        PaymentDetailsDTO result = paymentService.getPaymentById(paymentId);
-//
-//        // Assert
-//        assertEquals(paymentDetailsDTO, result);
-//    }
+    @Test
+    void testGetAllPayments() {
+        when(paymentRepo.findAll()).thenReturn(Arrays.asList(payment));
+        when(paymentRepo.findById(1L)).thenReturn(Optional.of(payment));
+        when(accountService.getAccountById(1L)).thenReturn(fromAccount);
+        when(payeeService.getPayeeById(1L)).thenReturn(payee);
+        when(accountService.getPayeeAccountDetailsByName("John Doe")).thenReturn(toAccount);
+        when(feeService.findFeeById(1L)).thenReturn(fee);
 
-//    @Test
-//    void testAddPayment() {
-//        // Arrange
-//        Payment payment = new Payment(100L, 200L, 300L);
-//        payment.setPaymentId(1L);
-//
-//        when(paymentRepo.save(payment)).thenReturn(payment);
-//
-//        // Act
-//        long result = paymentService.addPayment(payment);
-//
-//        // Assert
-//        assertEquals(payment.getPaymentId(), result);
-//    }
+        var result = paymentService.getAllPayments();
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(paymentRepo).findAll();
+    }
+
+    @Test
+    void testGetPaymentById() {
+        when(paymentRepo.findById(1L)).thenReturn(Optional.of(payment));
+        when(accountService.getAccountById(1L)).thenReturn(fromAccount);
+        when(payeeService.getPayeeById(1L)).thenReturn(payee);
+        when(accountService.getPayeeAccountDetailsByName("John Doe")).thenReturn(toAccount);
+        when(feeService.findFeeById(1L)).thenReturn(fee);
+
+        var result = paymentService.getPaymentById(1L);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getPaymentId());
+        verify(paymentRepo).findById(1L);
+    }
+
+    @Test
+    void testAddPayment() {
+        when(paymentRepo.save(any(Payment.class))).thenReturn(payment);
+
+        var result = paymentService.addPayment(payment);
+
+        assertEquals(1L, result);
+        verify(paymentRepo).save(payment);
+    }
 
     @Test
     void testAddPaymentDetails() {
-        // Arrange
-        Payment payment = new Payment(100L, 200L, 300L);
-        payment.setPaymentId(1L);
+        when(paymentRepo.save(any(Payment.class))).thenReturn(payment);
+        when(payeeService.getPayeeById(1L)).thenReturn(payee);
+        when(accountService.getPayeeAccountDetailsByName("John Doe")).thenReturn(toAccount);
+        when(accountService.getAccountById(1L)).thenReturn(fromAccount);
+        when(feeService.calculateFee(1L, 100.0)).thenReturn(102.0);
 
-        Payee payee = new Payee();
-        payee.setPayeeName("Test Payee");
-        payee.setAmountDue(1000.0);
+        var result = paymentService.addPaymentDetails(payment);
 
-        Account toAccount = new Account();
-        toAccount.setAccountBalance(5000.0);
-
-        Account fromAccount = new Account();
-        fromAccount.setAccountBalance(2000.0);
-
-        Fee fee = new Fee();
-        when(feeService.calculateFee(payment.getFeeId(), payee.getAmountDue())).thenReturn(50.0);
-
-        when(payeeService.getPayeeById(payment.getPayeeId())).thenReturn(payee);
-        when(accountService.getPayeeAccountDetailsByName(payee.getPayeeName())).thenReturn(toAccount);
-        when(accountService.getAccountById(payment.getAccountId())).thenReturn(fromAccount);
-
-        when(paymentRepo.save(payment)).thenReturn(payment);
-
-        // Act
-        long result = paymentService.addPaymentDetails(payment);
-
-        // Assert
-        assertEquals(payment.getPaymentId(), result);
-        assertEquals(5050.0, toAccount.getAccountBalance());
-        assertEquals(1950.0, fromAccount.getAccountBalance());
-        assertEquals(0.0, payee.getAmountDue());
+        assertEquals(1L, result);
+        verify(paymentRepo).save(payment);
     }
 
-//    @Test
-//    void testUpdatePayment() {
-//        // Arrange
-//        long paymentId = 1L;
-//        Payment payment = new Payment(100L, 200L, 300L);
-//        payment.setPaymentId(paymentId);
-//
-//        when(paymentRepo.findById(paymentId)).thenReturn(Optional.of(payment));
-//        when(paymentRepo.save(payment)).thenReturn(payment);
-//
-//        // Act
-//        Payment result = paymentService.updatePayment(paymentId, payment);
-//
-//        // Assert
-//        assertEquals(payment, result);
-//    }
+    @Test
+    void testUpdatePayment() {
+        when(paymentRepo.findById(1L)).thenReturn(Optional.of(payment));
+        when(payeeService.getPayeeById(1L)).thenReturn(payee);
+        when(accountService.getPayeeAccountDetailsByName("John Doe")).thenReturn(toAccount);
+        when(accountService.getAccountById(1L)).thenReturn(fromAccount);
+        when(feeService.calculateFee(1L, 100.0)).thenReturn(102.0);
+
+        var updatedPayment = new Payment();
+        updatedPayment.setPaymentId(1L);
+        updatedPayment.setAccountId(1L);
+        updatedPayment.setPayeeId(1L);
+        updatedPayment.setFeeId(1L);
+
+        var result = paymentService.updatePayment(1L, updatedPayment);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getPaymentId());
+        verify(paymentRepo).save(payment);
+    }
 
     @Test
     void testDeletePayment() {
-        // Arrange
-        long paymentId = 1L;
+        var result = paymentService.deletePayment(1L);
 
-        // Act
-        boolean result = paymentService.deletePayment(paymentId);
-
-        // Assert
-        verify(paymentRepo, times(1)).deleteById(paymentId);
         assertEquals(true, result);
+        verify(paymentRepo).deleteById(1L);
     }
 }

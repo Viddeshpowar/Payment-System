@@ -9,24 +9,23 @@ Swagger URL :- http://localhost:9090/swagger-ui/index.html#
 1. Payee-Controller Adding Data (Post Mapping) :-
 {
   "payee": {
-  "payeeNumber": 12346,
-  "payeeName": "Sumit",
-  "amountDue": 100.00,
-  "dueDate": "2024-07-29"
-},
+    "payeeNumber": 1450,
+    "payeeName": "Sujay",
+    "amountDue": 100,
+    "dueDate": "2024-07-31"
+  },
   "toAccount": {
-  "accountNumber": 100,
-  "accountName": "viddesh",
-  "accountBalance": 500.00,
-  "accountStatus": "Active"
+    "accountNumber": 501,
+    "accountName": "Sujay",
+    "accountBalance": 500.03,
+    "accountStatus": "Active"
+  }
 }
-}
-
 
 2. From-Account Details adding Data (Post Mapping)
 {
   "accountNumber": 100,
-  "accountName": "viddesh",
+  "accountName": "Harshal",
   "accountBalance": 500.00,
   "accountStatus": "Active"
 }
